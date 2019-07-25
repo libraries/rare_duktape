@@ -15,10 +15,16 @@ $ cargo run --release --example fib_js
 
 ```
 # C
-First run result: exit=0 cycles=10431 ret=[0, 0, 0, 0, 0, 0, 0, 55]
-Run 10000 in 5s
+First run result: exit=0 ret=[0, 0, 0, 0, 0, 0, 0, 55] cycles=10431
+Run 10000 in 5s, TPS=2000
 
 # JavaScript
-First run result: exit=0 cycles=8064265 ret=[0, 0, 0, 0, 0, 0, 0, 55]
-Run 100 in 21s
+First run result: exit=0 ret=[0, 0, 0, 0, 0, 0, 0, 55] cycles=8064265
+Run 100 in 20s, TPS=5
+```
+
+# Clean
+
+```
+$ docker rmi nervos/ckb-riscv-gnu-toolchain
 ```

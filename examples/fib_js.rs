@@ -44,5 +44,6 @@ fn main() {
             );
         }
     }
-    println!("Run {:?} in {:?}s", ITER, now.elapsed().unwrap().as_secs())
+    let d = now.elapsed().unwrap().as_secs();
+    println!("Run {:?} in {:?}s, TPS={:?}", ITER, d, ITER / d as usize);
 }
