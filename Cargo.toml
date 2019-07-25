@@ -1,0 +1,11 @@
+[package]
+name = "rare_duktape"
+version = "0.1.0"
+authors = ["mohanson <mohanson@outlook.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bytes = "0.4"
+ckb-vm =  { git = "https://github.com/nervosnetwork/ckb-vm", features=["asm"] }
