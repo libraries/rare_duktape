@@ -1,6 +1,6 @@
 # Rare Duktape
 
-Tests for c/duktape on RISCV VM.
+Tests for c / duktape on RISCV VM
 
 ```
 $ git clone https://github.com/mohanson/rare_duktape
