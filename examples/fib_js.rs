@@ -1,10 +1,6 @@
 use bytes::Bytes;
-use ckb_vm::machine::asm::{AsmCoreMachine, AsmMachine};
-use ckb_vm::{DefaultMachineBuilder, SupportMachine};
-use rare_duktape::{instruction_cycles, syscall};
-use std::cell::RefCell;
+use rare_duktape::MachineType;
 use std::fs;
-use std::rc::Rc;
 use std::time::SystemTime;
 
 const ITER: usize = 100;
@@ -14,33 +10,31 @@ fn main() {
     let jode = fs::read("./examples/fib.js").unwrap();
     let args = vec![Bytes::from("main"), Bytes::from(jode), Bytes::from("10")];
 
+    println!("Use asm machine, {:?} times", ITER);
     let now = SystemTime::now();
     for i in 0..ITER {
-        let ret_data = Rc::new(RefCell::new(Vec::new()));
-        let core_machine = AsmCoreMachine::new_with_max_cycles(1_000_000_000);
-        let machine = DefaultMachineBuilder::<Box<AsmCoreMachine>>::new(core_machine)
-            .instruction_cycle_func(Box::new(instruction_cycles))
-            .syscall(Box::new(syscall::SyscallDebug::new(
-                "log:",
-                std::io::stdout(),
-            )))
-            .syscall(Box::new(syscall::SyscallRet::new(ret_data.clone())))
-            .build();
-        let mut machine = AsmMachine::new(machine);
-
-        machine
-            .load_program(&Bytes::from(code.clone()), &args)
-            .unwrap();
-
-        let exit = machine.run().unwrap();
-        let cycles = machine.machine.cycles();
-
+        let (exit, ret_data, cycles) =
+            rare_duktape::exec(MachineType::Asm, &Bytes::from(code.clone()), &args);
         if i == 0 {
             println!(
                 "First run result: exit={:?} ret={:?} cycles={:?}",
-                exit,
-                ret_data.borrow(),
-                cycles
+                exit, ret_data, cycles
+            );
+        }
+    }
+    let d = now.elapsed().unwrap().as_secs();
+    println!("Run {:?} in {:?}s, TPS={:?}", ITER, d, ITER / d as usize);
+    println!("");
+
+    println!("Use native rust, {:?} times", ITER);
+    let now = SystemTime::now();
+    for i in 0..ITER {
+        let (exit, ret_data, cycles) =
+            rare_duktape::exec(MachineType::NativeRust, &Bytes::from(code.clone()), &args);
+        if i == 0 {
+            println!(
+                "First run result: exit={:?} ret={:?} cycles={:?}",
+                exit, ret_data, cycles
             );
         }
     }
