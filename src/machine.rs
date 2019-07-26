@@ -23,6 +23,7 @@ pub fn exec(machine_type: MachineType, code: &Bytes, args: &[Bytes]) -> (i8, Vec
                 std::io::stdout(),
             )))
             .syscall(Box::new(syscall::SyscallRet::new(ret_data.clone())))
+            .syscall(Box::new(syscall::SyscallEmit::new()))
             .build();
             machine.load_program(code, args).unwrap();
             let exit = machine.run().unwrap();
@@ -39,6 +40,7 @@ pub fn exec(machine_type: MachineType, code: &Bytes, args: &[Bytes]) -> (i8, Vec
                     std::io::stdout(),
                 )))
                 .syscall(Box::new(syscall::SyscallRet::new(ret_data.clone())))
+                .syscall(Box::new(syscall::SyscallEmit::new()))
                 .build();
             let mut machine = AsmMachine::new(machine);
             machine.load_program(code, args).unwrap();
