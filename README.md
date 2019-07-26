@@ -9,6 +9,7 @@ $ make riscv/duktape riscv/fib
 
 $ cargo run --release --example fib_c
 $ cargo run --release --example fib_js
+$ cargo run --release --example secp256k1_bench
 ```
 
 # Test Result
