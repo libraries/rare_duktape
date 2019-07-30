@@ -11,6 +11,7 @@ $ cargo run --release --example fib_c
 $ cargo run --release --example fib_js
 $ cargo run --release --example secp256k1_bench
 $ cargo run --release --example matching_engine
+$ cargo run --release --example calc
 ```
 
 # Test Result
